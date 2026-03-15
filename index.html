@@ -343,13 +343,13 @@ footer { background: #050505; border-top: 1px solid var(--c-border); padding: 40
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-document.addEventListener('click', function(e) {
-  const btn = e.target.closest('button[data-faq]');
-  if (!btn) return;
-  const item = btn.closest('.faq-item');
-  const isOpen = item.classList.contains('open');
-  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-  if (!isOpen) item.classList.add('open');
+document.querySelectorAll('.faq-q').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var item = this.closest('.faq-item');
+    var isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('open'); });
+    if (!isOpen) item.classList.add('open');
+  });
 });
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((e, i) => {
