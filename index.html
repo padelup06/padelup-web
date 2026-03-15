@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PadelUp — Analyse IA pour votre jeu de padel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --c-black: #0a0a0a;
+  --c-white: #f5f3ee;
+  --c-green: #3ecf5a;
+  --c-green-dark: #2ba844;
+  --c-gray: #141414;
+  --c-muted: #666;
+  --c-border: rgba(255,255,255,0.07);
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--c-black); color: var(--c-white); font-family: var(--font-body); overflow-x: hidden; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 48px;
+  background: rgba(10,10,10,0.92); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--c-border);
+}
+.nav-logo { font-family: var(--font-display); font-size: 26px; color: var(--c-white); text-decoration: none; letter-spacing: 0.04em; }
+.nav-logo span { color: var(--c-green); }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a { color: var(--c-muted); font-size: 14px; text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--c-white); }
+.nav-cta { background: var(--c-green); color: var(--c-black); padding: 10px 22px; border-radius: 100px; font-size: 14px; font-weight: 500; text-decoration: none; transition: background 0.2s; }
+.nav-cta:hover { background: var(--c-green-dark); }
+
+/* HERO */
+.hero { min-height: 100vh; position: relative; overflow: hidden; display: flex; align-items: center; }
+.hero-bg-img { position: absolute; inset: 0; background: url('feature_graphic.png') center/cover no-repeat; filter: brightness(0.32) saturate(0.9); z-index: 0; }
+.hero-overlay { position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(10,10,10,0.96) 38%, rgba(10,10,10,0.2) 100%), linear-gradient(0deg, rgba(10,10,10,0.85) 0%, transparent 55%); }
+.hero-content { position: relative; z-index: 2; padding: 120px 48px 80px; max-width: 640px; }
+.hero-tag { display: inline-flex; align-items: center; gap: 8px; background: rgba(62,207,90,0.12); border: 1px solid rgba(62,207,90,0.3); color: var(--c-green); padding: 6px 14px; border-radius: 100px; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 28px; animation: fadeUp 0.6s ease both; }
+.hero-tag::before { content: '●'; font-size: 7px; }
+.hero-title { font-family: var(--font-display); font-size: clamp(64px, 9vw, 118px); line-height: 0.92; animation: fadeUp 0.6s 0.1s ease both; }
+.hero-title .accent { color: var(--c-green); }
+.hero-subtitle { font-size: 18px; font-weight: 300; color: rgba(245,243,238,0.58); max-width: 480px; margin-top: 24px; line-height: 1.6; animation: fadeUp 0.6s 0.2s ease both; }
+.hero-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; animation: fadeUp 0.6s 0.25s ease both; }
+.hero-badge { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.06); border: 1px solid var(--c-border); padding: 7px 14px; border-radius: 100px; font-size: 12px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: rgba(245,243,238,0.65); }
+.hero-badge.gold { border-color: rgba(255,200,50,0.35); color: #ffc832; background: rgba(255,200,50,0.07); }
+.hero-actions { display: flex; gap: 14px; margin-top: 40px; flex-wrap: wrap; animation: fadeUp 0.6s 0.3s ease both; }
+.btn-store { display: flex; align-items: center; gap: 12px; background: var(--c-white); color: var(--c-black); padding: 13px 22px; border-radius: 14px; text-decoration: none; transition: transform 0.2s, background 0.2s; }
+.btn-store:hover { transform: translateY(-2px); background: var(--c-green); }
+.btn-store svg { width: 20px; height: 20px; flex-shrink: 0; }
+.btn-store-text { display: flex; flex-direction: column; }
+.btn-store-sub { font-size: 10px; opacity: 0.55; line-height: 1; }
+.btn-store-name { font-size: 14px; font-weight: 500; line-height: 1.3; }
+.hero-stat { display: flex; gap: 36px; margin-top: 56px; padding-top: 36px; border-top: 1px solid var(--c-border); animation: fadeUp 0.6s 0.4s ease both; }
+.stat-num { font-family: var(--font-display); font-size: 36px; color: var(--c-green); line-height: 1; }
+.stat-label { font-size: 12px; color: var(--c-muted); margin-top: 3px; }
+
+/* SECTION */
+section { padding: 96px 48px; }
+.section-tag { font-family: var(--font-mono); font-size: 11px; color: var(--c-green); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 14px; }
+.section-title { font-family: var(--font-display); font-size: clamp(40px, 5vw, 68px); line-height: 0.95; margin-bottom: 18px; }
+.section-sub { font-size: 16px; font-weight: 300; color: rgba(245,243,238,0.5); max-width: 460px; line-height: 1.6; }
+
+/* FEATURES */
+.features { background: var(--c-gray); }
+.features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 56px; }
+.feature-card { background: var(--c-black); padding: 36px 28px; position: relative; overflow: hidden; transition: background 0.3s; }
+.feature-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--c-green); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
+.feature-card:hover::before { transform: scaleX(1); }
+.feature-card:hover { background: #161616; }
+.feature-icon { font-size: 26px; margin-bottom: 16px; }
+.feature-title { font-size: 17px; font-weight: 500; margin-bottom: 8px; }
+.feature-desc { font-size: 14px; color: var(--c-muted); line-height: 1.65; }
+
+/* SCREENSHOTS */
+.screenshots { overflow: hidden; }
+.screenshots-intro { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 24px; }
+.screenshots-track { display: flex; gap: 16px; margin-top: 52px; overflow-x: auto; padding-bottom: 16px; scrollbar-width: none; cursor: grab; }
+.screenshots-track:active { cursor: grabbing; }
+.screenshots-track::-webkit-scrollbar { display: none; }
+.screen-card { flex-shrink: 0; width: 195px; border-radius: 24px; overflow: hidden; border: 1px solid var(--c-border); transition: transform 0.3s, border-color 0.3s; position: relative; }
+.screen-card:hover { transform: translateY(-10px) scale(1.02); border-color: rgba(62,207,90,0.3); }
+.screen-card img { width: 100%; display: block; }
+.screen-label { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, transparent 100%); padding: 32px 14px 14px; font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.85); }
+
+/* TESTIMONIALS */
+.testimonials { background: var(--c-gray); }
+.testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 52px; }
+.testi-card { background: var(--c-black); border-radius: 20px; padding: 28px; border: 1px solid var(--c-border); transition: border-color 0.3s, transform 0.3s; }
+.testi-card:hover { border-color: rgba(62,207,90,0.25); transform: translateY(-4px); }
+.testi-stars { color: var(--c-green); font-size: 13px; margin-bottom: 14px; letter-spacing: 2px; }
+.testi-text { font-size: 14px; font-weight: 300; line-height: 1.7; color: rgba(245,243,238,0.75); }
+.testi-author { display: flex; align-items: center; gap: 10px; margin-top: 20px; }
+.testi-avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--c-green), var(--c-green-dark)); display: flex; align-items: center; justify-content: center; font-weight: 500; font-size: 14px; color: var(--c-black); flex-shrink: 0; }
+.testi-name { font-size: 13px; font-weight: 500; }
+.testi-role { font-size: 11px; color: var(--c-muted); }
+
+/* FAQ */
+.faq-list { max-width: 700px; margin-top: 52px; }
+.faq-item { border-bottom: 1px solid var(--c-border); }
+.faq-q { width: 100%; background: none; border: none; color: var(--c-white); font-family: var(--font-body); font-size: 15px; text-align: left; padding: 22px 0; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 20px; transition: color 0.2s; }
+.faq-q:hover { color: var(--c-green); }
+.faq-icon { width: 22px; height: 22px; border-radius: 50%; background: rgba(62,207,90,0.1); border: 1px solid rgba(62,207,90,0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--c-green); transition: transform 0.3s; font-size: 16px; }
+.faq-item.open .faq-icon { transform: rotate(45deg); }
+.faq-a { font-size: 14px; font-weight: 300; color: rgba(245,243,238,0.55); line-height: 1.7; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s; }
+.faq-item.open .faq-a { max-height: 200px; padding-bottom: 20px; }
+
+/* CTA */
+.cta-download { position: relative; overflow: hidden; background: #0c1e0e; text-align: center; padding: 100px 48px; }
+.cta-download::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(62,207,90,0.1) 0%, transparent 70%); pointer-events: none; }
+.cta-download .section-sub { color: rgba(245,243,238,0.5); margin: 0 auto 40px; text-align: center; position: relative; z-index: 1; }
+.cta-btns { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; position: relative; z-index: 1; }
+.btn-store-outline { display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); color: var(--c-white); padding: 13px 22px; border-radius: 14px; text-decoration: none; transition: transform 0.2s, border-color 0.2s, background 0.2s; }
+.btn-store-outline:hover { transform: translateY(-2px); background: rgba(62,207,90,0.12); border-color: rgba(62,207,90,0.4); }
+.btn-store-outline svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+/* FOOTER */
+footer { background: #050505; border-top: 1px solid var(--c-border); padding: 40px 48px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+.footer-logo { font-family: var(--font-display); font-size: 22px; }
+.footer-logo span { color: var(--c-green); }
+.footer-copy { font-size: 11px; color: rgba(255,255,255,0.18); margin-top: 4px; }
+.footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+.footer-links a { font-size: 13px; color: var(--c-muted); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--c-white); }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 900px) {
+  nav { padding: 14px 20px; }
+  .nav-links { display: none; }
+  section { padding: 64px 20px; }
+  .hero-content { padding: 100px 20px 60px; }
+  .features-grid { grid-template-columns: 1fr; gap: 2px; }
+  .testimonials-grid { grid-template-columns: 1fr; gap: 14px; }
+  footer { padding: 28px 20px; flex-direction: column; align-items: flex-start; }
+  .cta-download { padding: 64px 20px; }
+  .screenshots-intro { flex-direction: column; align-items: flex-start; }
+  .screenshots-intro .section-sub { text-align: left; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">Padel<span>Up</span></a>
+  <ul class="nav-links">
+    <li><a href="#features">Fonctionnalités</a></li>
+    <li><a href="#screenshots">App</a></li>
+    <li><a href="#avis">Avis</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <a href="#download" class="nav-cta">Télécharger</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg-img"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Analyse IA · Padel</div>
+    <h1 class="hero-title">ELEVATE<br>YOUR <span class="accent">GAME</span></h1>
+    <p class="hero-subtitle">Filmez votre match, l'IA analyse chaque coup et vous donne un programme d'entraînement sur mesure.</p>
+    <div class="hero-badges">
+      <span class="hero-badge">📹 Analyse IA</span>
+      <span class="hero-badge gold">⭐ ELO Certifié</span>
+      <span class="hero-badge">🏆 Classement</span>
+      <span class="hero-badge">📋 Programme perso</span>
+    </div>
+    <div class="hero-actions">
+      <a href="https://play.google.com/store/apps/details?id=com.padelup" class="btn-store" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.3.17.64.24.99.2L15.88 12 12.04 8.16 3.18 23.76zm16.4-12.51L16.4 9.5 12.28 12l4.12 2.5 3.18-1.75c.9-.52.9-1.48 0-2zM2.4.44C2.14.76 2 1.21 2 1.78V22.2c0 .57.14 1.02.4 1.34l.07.07L11.4 12v-.21L2.47.37 2.4.44zm9.64 11.34L3.17.24c.35-.04.7.03 1 .2l11.22 6.44-3.35 4.9z"/></svg>
+        <div class="btn-store-text"><span class="btn-store-sub">Disponible sur</span><span class="btn-store-name">Google Play</span></div>
+      </a>
+      <a href="#" class="btn-store" style="opacity:0.45;pointer-events:none;">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        <div class="btn-store-text"><span class="btn-store-sub">Bientôt sur</span><span class="btn-store-name">App Store</span></div>
+      </a>
+    </div>
+    <div class="hero-stat">
+      <div><div class="stat-num">IA</div><div class="stat-label">Analyse vidéo</div></div>
+      <div><div class="stat-num">ELO</div><div class="stat-label">Certifié</div></div>
+      <div><div class="stat-num">+12</div><div class="stat-label">Métriques</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="section-tag reveal">// fonctionnalités</div>
+  <h2 class="section-title reveal">CE QUE<br>L'IA VOIT</h2>
+  <p class="section-sub reveal">PadelUp décompose votre jeu frame par frame et identifie précisément vos axes de progression.</p>
+  <div class="features-grid">
+    <div class="feature-card reveal">
+      <div class="feature-icon">🎥</div>
+      <h3 class="feature-title">Analyse IA de vos matchs</h3>
+      <p class="feature-desc">Score global, métriques détaillées (habileté, filet, technique, réactivité), points forts et axes d'amélioration.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon">⭐</div>
+      <h3 class="feature-title">ELO Certifié</h3>
+      <p class="feature-desc">Votre classement ELO évolue à chaque match analysé. Un niveau officiel, transparent et basé sur vos vraies performances.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon">📋</div>
+      <h3 class="feature-title">Programme personnalisé</h3>
+      <p class="feature-desc">Des exercices ciblés générés par l'IA après chaque analyse. Travaillez exactement ce qui fera la différence sur le terrain.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon">🏆</div>
+      <h3 class="feature-title">Classement national & régional</h3>
+      <p class="feature-desc">Comparez-vous aux joueurs de votre région et de toute la France. Filtres par niveau, catégorie et format.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon">👥</div>
+      <h3 class="feature-title">Matchs publics</h3>
+      <p class="feature-desc">Trouvez des partenaires à votre niveau et rejoignez des matchs publics dans les clubs partenaires près de chez vous.</p>
+    </div>
+    <div class="feature-card reveal">
+      <div class="feature-icon">🎯</div>
+      <h3 class="feature-title">Reconnaissance des joueurs</h3>
+      <p class="feature-desc">L'IA identifie automatiquement les 4 joueurs sur le terrain. Sélectionnez votre profil pour une analyse 100% ciblée.</p>
+    </div>
+  </div>
+</section>
+
+<section class="screenshots" id="screenshots">
+  <div class="screenshots-intro">
+    <div>
+      <div class="section-tag reveal">// l'app</div>
+      <h2 class="section-title reveal">DANS VOS<br>MAINS</h2>
+    </div>
+    <p class="section-sub reveal" style="text-align:right;">Interface conçue pour la clarté et la performance, même après un match intense.</p>
+  </div>
+  <div class="screenshots-track" id="track">
+    <div class="screen-card reveal"><img src="ps_dashboard.png" alt="Dashboard ELO"><div class="screen-label">Ton ELO en temps réel</div></div>
+    <div class="screen-card reveal"><img src="ps_analyse.png" alt="Analyse IA"><div class="screen-label">Analyse IA de tes matchs</div></div>
+    <div class="screen-card reveal"><img src="ps_qui_es_tu.png" alt="Sélection joueur"><div class="screen-label">L'IA identifie les joueurs</div></div>
+    <div class="screen-card reveal"><img src="ps_exercices.png" alt="Exercices personnalisés"><div class="screen-label">Ton programme sur mesure</div></div>
+    <div class="screen-card reveal"><img src="ps_classement.png" alt="Classement"><div class="screen-label">Grimpe le classement</div></div>
+    <div class="screen-card reveal"><img src="ps_match_public.png" alt="Matchs publics"><div class="screen-label">Trouve des partenaires</div></div>
+    <div class="screen-card reveal"><img src="ps_paywall.png" alt="Premium"><div class="screen-label">Passe au niveau supérieur</div></div>
+  </div>
+</section>
+
+<section class="testimonials" id="avis">
+  <div class="section-tag reveal">// avis joueurs</div>
+  <h2 class="section-title reveal">ILS ONT<br>PROGRESSÉ</h2>
+  <div class="testimonials-grid">
+    <div class="testi-card reveal">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"En 3 semaines j'ai compris pourquoi je perdais mes échanges au filet. PadelUp m'a montré exactement quoi travailler. Résultat : +2 niveaux en compétition."</p>
+      <div class="testi-author"><div class="testi-avatar">A</div><div><div class="testi-name">Alexandre M.</div><div class="testi-role">Joueur P250 · Nice</div></div></div>
+    </div>
+    <div class="testi-card reveal">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"L'analyse IA est bluffante. Elle a détecté que je montais au filet trop lentement — un truc que même mon coach n'avait pas remarqué. Indispensable."</p>
+      <div class="testi-author"><div class="testi-avatar">L</div><div><div class="testi-name">Lucie P.</div><div class="testi-role">Joueuse P100 · Paris</div></div></div>
+    </div>
+    <div class="testi-card reveal">
+      <div class="testi-stars">★★★★☆</div>
+      <p class="testi-text">"Le plan d'entraînement personnalisé change tout. Fini les exercices génériques — chaque session cible mes vraies lacunes. Mon smash s'est nettement amélioré."</p>
+      <div class="testi-author"><div class="testi-avatar">K</div><div><div class="testi-name">Karim B.</div><div class="testi-role">Joueur P500 · Lyon</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="section-tag reveal">// faq</div>
+  <h2 class="section-title reveal">QUESTIONS<br>FRÉQUENTES</h2>
+  <div class="faq-list">
+    <div class="faq-item reveal">
+      <button class="faq-q" onclick="toggleFaq(this)">Comment fonctionne l'analyse IA ?<span class="faq-icon">+</span></button>
+      <div class="faq-a">Uploadez la vidéo de votre match depuis l'app. Notre IA analyse chaque frame pour détecter vos coups, déplacements et patterns tactiques. L'analyse génère un rapport complet avec votre score ELO et vos axes de progression.</div>
+    </div>
+    <div class="faq-item reveal">
+      <button class="faq-q" onclick="toggleFaq(this)">Comment filmer le match ?<span class="faq-icon">+</span></button>
+      <div class="faq-a">L'idéal est une caméra fixe en hauteur qui filme tout le terrain. Un smartphone sur trépied fonctionne très bien. L'IA identifie automatiquement les 4 joueurs et vous demande de sélectionner votre profil avant l'analyse.</div>
+    </div>
+    <div class="faq-item reveal">
+      <button class="faq-q" onclick="toggleFaq(this)">L'app est-elle gratuite ?<span class="faq-icon">+</span></button>
+      <div class="faq-a">PadelUp propose une version gratuite avec analyse limitée. L'abonnement Premium (9,99€/mois ou 119,99€/an) donne accès aux analyses illimitées, au programme personnalisé complet et au classement ELO certifié.</div>
+    </div>
+    <div class="faq-item reveal">
+      <button class="faq-q" onclick="toggleFaq(this)">Mes vidéos sont-elles stockées ?<span class="faq-icon">+</span></button>
+      <div class="faq-a">Vos vidéos sont traitées de façon sécurisée et ne sont jamais partagées avec des tiers. Vous pouvez supprimer vos données à tout moment depuis l'app ou via notre page de suppression de compte.</div>
+    </div>
+    <div class="faq-item reveal">
+      <button class="faq-q" onclick="toggleFaq(this)">Disponible sur iPhone ?<span class="faq-icon">+</span></button>
+      <div class="faq-a">PadelUp est actuellement disponible sur Android (Google Play). La version iOS est en cours de développement et sera disponible prochainement.</div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-download" id="download">
+  <h2 class="section-title" style="position:relative;z-index:1;">PRÊT À<br><span style="color:var(--c-green)">PROGRESSER ?</span></h2>
+  <p class="section-sub">Téléchargez PadelUp gratuitement et analysez votre premier match dès aujourd'hui.</p>
+  <div class="cta-btns">
+    <a href="https://play.google.com/store/apps/details?id=com.padelup" class="btn-store-outline" target="_blank">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.3.17.64.24.99.2L15.88 12 12.04 8.16 3.18 23.76zm16.4-12.51L16.4 9.5 12.28 12l4.12 2.5 3.18-1.75c.9-.52.9-1.48 0-2zM2.4.44C2.14.76 2 1.21 2 1.78V22.2c0 .57.14 1.02.4 1.34l.07.07L11.4 12v-.21L2.47.37 2.4.44zm9.64 11.34L3.17.24c.35-.04.7.03 1 .2l11.22 6.44-3.35 4.9z"/></svg>
+      <div class="btn-store-text"><span class="btn-store-sub">Disponible sur</span><span class="btn-store-name">Google Play</span></div>
+    </a>
+    <a href="#" class="btn-store-outline" style="opacity:0.4;pointer-events:none;">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      <div class="btn-store-text"><span class="btn-store-sub">Bientôt sur</span><span class="btn-store-name">App Store</span></div>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div>
+    <div class="footer-logo">Padel<span>Up</span></div>
+    <div class="footer-copy">© 2026 PadelUp. Tous droits réservés.</div>
+  </div>
+  <div class="footer-links">
+    <a href="/privacy-policy.html">Politique de confidentialité</a>
+    <a href="/delete-account.html">Supprimer mon compte</a>
+    <a href="mailto:contact@apppadelup.com">Contact</a>
+  </div>
+</footer>
+
+<script>
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 70);
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+const track = document.getElementById('track');
+let isDown = false, startX, scrollLeft;
+track.addEventListener('mousedown', e => { isDown = true; startX = e.pageX - track.offsetLeft; scrollLeft = track.scrollLeft; });
+track.addEventListener('mouseleave', () => isDown = false);
+track.addEventListener('mouseup', () => isDown = false);
+track.addEventListener('mousemove', e => { if (!isDown) return; e.preventDefault(); track.scrollLeft = scrollLeft - (e.pageX - track.offsetLeft - startX); });
+</script>
+</body>
+</html>
