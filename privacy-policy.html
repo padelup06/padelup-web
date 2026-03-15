@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PadelUp — Politique de confidentialité</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0a0f0a;
+    color: #e0e0e0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+  }
+  .container { max-width: 640px; width: 100%; }
+  .logo { font-size: 28px; font-weight: 900; letter-spacing: 4px; color: #00C170; margin-bottom: 8px; }
+  .subtitle { font-size: 13px; color: #666; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 40px; }
+  h1 { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+  .date { font-size: 13px; color: #555; margin-bottom: 32px; }
+  h2 { font-size: 16px; font-weight: 700; color: #00C170; margin: 28px 0 10px; }
+  p { font-size: 14px; color: #aaa; line-height: 1.8; margin-bottom: 12px; }
+  ul { padding-left: 20px; color: #aaa; font-size: 14px; line-height: 2; margin-bottom: 12px; }
+  a { color: #00C170; text-decoration: none; }
+  .footer { margin-top: 40px; font-size: 12px; color: #444; text-align: center; line-height: 2; border-top: 1px solid #1e2e1e; padding-top: 20px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="logo">PADELUP</div>
+  <div class="subtitle">Elevate Your Game</div>
+
+  <h1>Politique de confidentialité</h1>
+  <div class="date">Dernière mise à jour : 15 mars 2026</div>
+
+  <p>PadelUp ("nous", "notre") s'engage à protéger vos données personnelles. Cette politique explique quelles données nous collectons, comment nous les utilisons et vos droits.</p>
+
+  <h2>1. Données collectées</h2>
+  <ul>
+    <li><strong>Compte :</strong> adresse email, nom d'utilisateur, photo de profil</li>
+    <li><strong>Profil sportif :</strong> niveau de jeu, ville/région, position sur le terrain</li>
+    <li><strong>Matchs :</strong> scores, résultats, historique des parties</li>
+    <li><strong>Vidéos :</strong> vidéos de match uploadées pour l'analyse IA</li>
+    <li><strong>Analyses IA :</strong> scores, métriques, coaching personnalisé</li>
+    <li><strong>Abonnement :</strong> statut Premium (géré par RevenueCat)</li>
+  </ul>
+
+  <h2>2. Utilisation des données</h2>
+  <ul>
+    <li>Calculer et afficher votre ELO certifié</li>
+    <li>Générer des analyses IA de vos matchs via Gemini (Google)</li>
+    <li>Personnaliser votre programme d'entraînement</li>
+    <li>Afficher le classement régional et national</li>
+    <li>Gérer votre abonnement Premium</li>
+    <li>Améliorer l'application</li>
+  </ul>
+
+  <h2>3. Partage des données</h2>
+  <p>Vos données ne sont jamais vendues. Elles peuvent être partagées avec :</p>
+  <ul>
+    <li><strong>Supabase</strong> — stockage et authentification (serveurs UE)</li>
+    <li><strong>Google Gemini</strong> — analyse IA des vidéos de match</li>
+    <li><strong>RevenueCat</strong> — gestion des abonnements</li>
+  </ul>
+
+  <h2>4. Vidéos de match</h2>
+  <p>Les vidéos uploadées sont utilisées uniquement pour l'analyse IA. Elles sont transmises à l'API Google Gemini et peuvent être conservées temporairement par Google conformément à leurs conditions d'utilisation. Nous ne partageons pas vos vidéos avec d'autres utilisateurs.</p>
+
+  <h2>5. Conservation des données</h2>
+  <p>Vos données sont conservées tant que votre compte est actif. En cas de suppression du compte, toutes vos données personnelles sont supprimées dans un délai de 7 jours, à l'exception des données de facturation conservées 30 jours pour obligations légales.</p>
+
+  <h2>6. Vos droits</h2>
+  <ul>
+    <li>Accéder à vos données</li>
+    <li>Corriger vos données</li>
+    <li>Supprimer votre compte et vos données</li>
+    <li>Exporter vos données</li>
+  </ul>
+  <p>Pour exercer vos droits : <a href="mailto:support@padelup.com">support@padelup.com</a></p>
+
+  <h2>7. Sécurité</h2>
+  <p>Toutes les données sont chiffrées en transit (HTTPS). Nous utilisons Supabase avec des politiques de sécurité Row Level Security (RLS) pour protéger vos données.</p>
+
+  <h2>8. Enfants</h2>
+  <p>PadelUp n'est pas destiné aux enfants de moins de 13 ans. Nous ne collectons pas sciemment de données sur des mineurs de moins de 13 ans.</p>
+
+  <h2>9. Contact</h2>
+  <p>Pour toute question : <a href="mailto:support@padelup.com">support@padelup.com</a></p>
+
+  <div class="footer">
+    © 2026 PadelUp · <a href="mailto:support@padelup.com">support@padelup.com</a><br>
+    <a href="delete-account.html">Suppression de compte</a>
+  </div>
+</div>
+</body>
+</html>
