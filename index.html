@@ -164,6 +164,35 @@ footer { background: #050505; border-top: 1px solid var(--c-border); padding: 40
   .screenshots-intro .section-sub { text-align: left; }
 }
 </style>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.faq-q').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var item = this.closest('.faq-item');
+      var isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('open'); });
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e, i) {
+      if (e.isIntersecting) {
+        setTimeout(function() { e.target.classList.remove('hidden'); e.target.classList.add('visible'); }, i * 70);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('hidden'); observer.observe(el); });
+  var track = document.getElementById('track');
+  if (track) {
+    var isDown = false, startX, scrollLeft;
+    track.addEventListener('mousedown', function(e) { isDown = true; startX = e.pageX - track.offsetLeft; scrollLeft = track.scrollLeft; });
+    track.addEventListener('mouseleave', function() { isDown = false; });
+    track.addEventListener('mouseup', function() { isDown = false; });
+    track.addEventListener('mousemove', function(e) { if (!isDown) return; e.preventDefault(); track.scrollLeft = scrollLeft - (e.pageX - track.offsetLeft - startX); });
+  }
+});
+</script>
 </head>
 <body>
 
@@ -342,28 +371,5 @@ footer { background: #050505; border-top: 1px solid var(--c-border); padding: 40
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-document.querySelectorAll('.faq-q').forEach(function(btn) {
-  btn.addEventListener('click', function() {
-    var item = this.closest('.faq-item');
-    var isOpen = item.classList.contains('open');
-    document.querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('open'); });
-    if (!isOpen) item.classList.add('open');
-  });
-});
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      setTimeout(() => { e.target.classList.remove('hidden'); e.target.classList.add('visible'); }, i * 70);
-      observer.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.08 });
-document.querySelectorAll('.reveal').forEach(el => { el.classList.add('hidden'); observer.observe(el); });
-
-const track = document.getElementById('track');
-let isDown = false, startX, scrollLeft;
-track.addEventListener('mousedown', e => { isDown = true; startX = e.pageX - track.offsetLeft; scrollLeft = track.scrollLeft; });
-track.addEventListener('mouseleave', () => isDown = false);
-track.addEventListener('mouseup', () => isDown = false);
-track.addEventListener('mousemov
+</body>
+</html>
