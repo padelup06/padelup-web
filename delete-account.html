@@ -16,36 +16,11 @@
     align-items: center;
     padding: 40px 20px;
   }
-  .container {
-    max-width: 640px;
-    width: 100%;
-  }
-  .logo {
-    font-size: 28px;
-    font-weight: 900;
-    letter-spacing: 4px;
-    color: #00C170;
-    margin-bottom: 8px;
-  }
-  .subtitle {
-    font-size: 13px;
-    color: #666;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 40px;
-  }
-  h1 {
-    font-size: 24px;
-    font-weight: 800;
-    color: #fff;
-    margin-bottom: 12px;
-  }
-  p {
-    font-size: 15px;
-    color: #aaa;
-    line-height: 1.7;
-    margin-bottom: 20px;
-  }
+  .container { max-width: 640px; width: 100%; }
+  .logo { font-size: 28px; font-weight: 900; letter-spacing: 4px; color: #00C170; margin-bottom: 8px; }
+  .subtitle { font-size: 13px; color: #666; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 40px; }
+  h1 { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 12px; }
+  p { font-size: 15px; color: #aaa; line-height: 1.7; margin-bottom: 20px; }
   .card {
     background: #141a14;
     border: 1px solid #1e2e1e;
@@ -53,53 +28,58 @@
     padding: 24px;
     margin-bottom: 20px;
   }
-  .card h2 {
-    font-size: 16px;
-    font-weight: 700;
-    color: #00C170;
-    margin-bottom: 12px;
-  }
-  .card ol, .card ul {
-    padding-left: 20px;
-    color: #aaa;
-    font-size: 14px;
-    line-height: 2;
-  }
-  .card a {
-    color: #00C170;
-    text-decoration: none;
-    font-weight: 600;
-  }
-  .data-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-    margin-top: 8px;
-  }
-  .data-table th {
-    text-align: left;
-    padding: 8px 12px;
-    background: #1e2e1e;
-    color: #00C170;
-    font-size: 12px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-  .data-table td {
-    padding: 10px 12px;
-    border-bottom: 1px solid #1e2e1e;
-    color: #aaa;
-    vertical-align: top;
-  }
+  .card h2 { font-size: 16px; font-weight: 700; color: #00C170; margin-bottom: 16px; }
+  .card ol, .card ul { padding-left: 20px; color: #aaa; font-size: 14px; line-height: 2; }
+  .data-table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 8px; }
+  .data-table th { text-align: left; padding: 8px 12px; background: #1e2e1e; color: #00C170; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
+  .data-table td { padding: 10px 12px; border-bottom: 1px solid #1e2e1e; color: #aaa; vertical-align: top; }
   .badge-del { color: #ef4444; font-weight: 600; }
   .badge-keep { color: #f59e0b; font-weight: 600; }
-  .footer {
-    margin-top: 40px;
-    font-size: 12px;
-    color: #444;
-    text-align: center;
-    line-height: 2;
+
+  /* Formulaire */
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 12px; font-weight: 600; color: #00C170; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .form-group input, .form-group textarea {
+    width: 100%;
+    background: #0a0f0a;
+    border: 1px solid #1e2e1e;
+    border-radius: 10px;
+    padding: 12px 14px;
+    color: #e0e0e0;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
   }
+  .form-group input:focus, .form-group textarea:focus { border-color: #00C170; }
+  .form-group textarea { resize: vertical; min-height: 100px; }
+  .btn-submit {
+    width: 100%;
+    background: #00C170;
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: background 0.2s;
+    margin-top: 4px;
+  }
+  .btn-submit:hover { background: #00a85e; }
+  .success-msg {
+    display: none;
+    background: #00C17020;
+    border: 1px solid #00C17040;
+    border-radius: 10px;
+    padding: 16px;
+    color: #00C170;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 12px;
+  }
+  .footer { margin-top: 40px; font-size: 12px; color: #444; text-align: center; line-height: 2; }
 </style>
 </head>
 <body>
@@ -108,19 +88,28 @@
   <div class="subtitle">Elevate Your Game</div>
 
   <h1>Suppression de compte</h1>
-  <p>
-    Vous pouvez demander la suppression de votre compte PadelUp et de toutes vos données personnelles à tout moment.
-    La suppression est définitive et irréversible.
-  </p>
+  <p>Vous pouvez demander la suppression de votre compte PadelUp et de toutes vos données personnelles à tout moment. La suppression est définitive et irréversible.</p>
 
   <div class="card">
-    <h2>📧 Comment demander la suppression</h2>
-    <ol>
-      <li>Envoyez un email à <a href="/cdn-cgi/l/email-protection#4c3f393c3c233e380c3c2d282920393c622f2321"><span class="__cf_email__" data-cfemail="9be8eeebebf4e9efdbebfafffef7eeebb5f8f4f6">[email&#160;protected]</span></a></li>
-      <li>Indiquez l'adresse email associée à votre compte PadelUp</li>
-      <li>Indiquez en objet : <strong>"Suppression de compte"</strong></li>
-      <li>Votre demande sera traitée dans un délai de <strong>7 jours ouvrés</strong></li>
-    </ol>
+    <h2>📋 Formulaire de suppression</h2>
+    <form id="deleteForm">
+      <div class="form-group">
+        <label>Votre email PadelUp *</label>
+        <input type="email" id="email" placeholder="votre@email.com" required>
+      </div>
+      <div class="form-group">
+        <label>Votre nom d'utilisateur *</label>
+        <input type="text" id="username" placeholder="padelup_username" required>
+      </div>
+      <div class="form-group">
+        <label>Raison (optionnel)</label>
+        <textarea id="reason" placeholder="Pourquoi souhaitez-vous supprimer votre compte ?"></textarea>
+      </div>
+      <button type="submit" class="btn-submit">ENVOYER LA DEMANDE</button>
+    </form>
+    <div class="success-msg" id="successMsg">
+      ✅ Votre demande a bien été envoyée. Nous la traiterons dans un délai de 7 jours ouvrés.
+    </div>
   </div>
 
   <div class="card">
@@ -131,36 +120,12 @@
         <th>Action</th>
         <th>Délai</th>
       </tr>
-      <tr>
-        <td>Profil (email, username, photo)</td>
-        <td class="badge-del">Supprimé</td>
-        <td>Immédiat</td>
-      </tr>
-      <tr>
-        <td>Historique des matchs</td>
-        <td class="badge-del">Supprimé</td>
-        <td>Immédiat</td>
-      </tr>
-      <tr>
-        <td>Analyses IA et vidéos</td>
-        <td class="badge-del">Supprimé</td>
-        <td>Immédiat</td>
-      </tr>
-      <tr>
-        <td>ELO et classement</td>
-        <td class="badge-del">Supprimé</td>
-        <td>Immédiat</td>
-      </tr>
-      <tr>
-        <td>Plan d'entraînement</td>
-        <td class="badge-del">Supprimé</td>
-        <td>Immédiat</td>
-      </tr>
-      <tr>
-        <td>Données de facturation (abonnement)</td>
-        <td class="badge-keep">Conservé</td>
-        <td>30 jours (obligation légale)</td>
-      </tr>
+      <tr><td>Profil (email, username, photo)</td><td class="badge-del">Supprimé</td><td>Immédiat</td></tr>
+      <tr><td>Historique des matchs</td><td class="badge-del">Supprimé</td><td>Immédiat</td></tr>
+      <tr><td>Analyses IA et vidéos</td><td class="badge-del">Supprimé</td><td>Immédiat</td></tr>
+      <tr><td>ELO et classement</td><td class="badge-del">Supprimé</td><td>Immédiat</td></tr>
+      <tr><td>Plan d'entraînement</td><td class="badge-del">Supprimé</td><td>Immédiat</td></tr>
+      <tr><td>Données de facturation</td><td class="badge-keep">Conservé</td><td>30 jours (obligation légale)</td></tr>
     </table>
   </div>
 
@@ -170,4 +135,32 @@
       <li>La suppression du compte annule automatiquement tout abonnement Premium actif</li>
       <li>Les données supprimées ne peuvent pas être récupérées</li>
       <li>Les données de facturation sont conservées 30 jours conformément aux obligations légales</li>
-      <li>Pour toute question : <a href="/cdn-cgi/l/email-protection#9deee8ededf2efe9ddedfcf9f8f1e8edb3fef2f0"><span class="__cf_email__" data-cf
+      <li>Délai de traitement : <strong>7 jours ouvrés</strong></li>
+    </ul>
+  </div>
+
+  <div class="footer">
+    © 2026 PadelUp · <a href="/privacy-policy.html" style="color:#555;">Politique de confidentialité</a>
+  </div>
+</div>
+
+<script>
+document.getElementById('deleteForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var email = document.getElementById('email').value;
+  var username = document.getElementById('username').value;
+  var reason = document.getElementById('reason').value;
+  var subject = encodeURIComponent('Suppression de compte - ' + username);
+  var body = encodeURIComponent(
+    'Demande de suppression de compte\n\n' +
+    'Email : ' + email + '\n' +
+    'Username : ' + username + '\n' +
+    (reason ? 'Raison : ' + reason + '\n' : '')
+  );
+  window.location.href = 'mailto:contact@apppadelup.com?subject=' + subject + '&body=' + body;
+  document.getElementById('successMsg').style.display = 'block';
+  this.reset();
+});
+</script>
+</body>
+</html>
