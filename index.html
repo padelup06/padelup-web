@@ -293,23 +293,23 @@ footer { background: #050505; border-top: 1px solid var(--c-border); padding: 40
   <h2 class="section-title reveal">QUESTIONS<br>FRÉQUENTES</h2>
   <div class="faq-list">
     <div class="faq-item reveal">
-      <button class="faq-q" onclick="toggleFaq(this)">Comment fonctionne l'analyse IA ?<span class="faq-icon">+</span></button>
+      <button class="faq-q" data-faq>Comment fonctionne l'analyse IA ?<span class="faq-icon">+</span></button>
       <div class="faq-a">Uploadez la vidéo de votre match depuis l'app. Notre IA analyse chaque frame pour détecter vos coups, déplacements et patterns tactiques. L'analyse génère un rapport complet avec votre score ELO et vos axes de progression.</div>
     </div>
     <div class="faq-item reveal">
-      <button class="faq-q" onclick="toggleFaq(this)">Comment filmer le match ?<span class="faq-icon">+</span></button>
+      <button class="faq-q" data-faq>Comment filmer le match ?<span class="faq-icon">+</span></button>
       <div class="faq-a">L'idéal est une caméra fixe en hauteur qui filme tout le terrain. Un smartphone sur trépied fonctionne très bien. L'IA identifie automatiquement les 4 joueurs et vous demande de sélectionner votre profil avant l'analyse.</div>
     </div>
     <div class="faq-item reveal">
-      <button class="faq-q" onclick="toggleFaq(this)">L'app est-elle gratuite ?<span class="faq-icon">+</span></button>
+      <button class="faq-q" data-faq>L'app est-elle gratuite ?<span class="faq-icon">+</span></button>
       <div class="faq-a">PadelUp propose une version gratuite avec analyse limitée. L'abonnement Premium (9,99€/mois ou 119,99€/an) donne accès aux analyses illimitées, au programme personnalisé complet et au classement ELO certifié.</div>
     </div>
     <div class="faq-item reveal">
-      <button class="faq-q" onclick="toggleFaq(this)">Mes vidéos sont-elles stockées ?<span class="faq-icon">+</span></button>
+      <button class="faq-q" data-faq>Mes vidéos sont-elles stockées ?<span class="faq-icon">+</span></button>
       <div class="faq-a">Vos vidéos sont traitées de façon sécurisée et ne sont jamais partagées avec des tiers. Vous pouvez supprimer vos données à tout moment depuis l'app ou via notre page de suppression de compte.</div>
     </div>
     <div class="faq-item reveal">
-      <button class="faq-q" onclick="toggleFaq(this)">Disponible sur iPhone ?<span class="faq-icon">+</span></button>
+      <button class="faq-q" data-faq>Disponible sur iPhone ?<span class="faq-icon">+</span></button>
       <div class="faq-a">PadelUp est actuellement disponible sur Android (Google Play). La version iOS est en cours de développement et sera disponible prochainement.</div>
     </div>
   </div>
@@ -343,12 +343,14 @@ footer { background: #050505; border-top: 1px solid var(--c-border); padding: 40
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-function toggleFaq(btn) {
+document.addEventListener('click', function(e) {
+  const btn = e.target.closest('[data-faq]');
+  if (!btn) return;
   const item = btn.closest('.faq-item');
   const isOpen = item.classList.contains('open');
   document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
   if (!isOpen) item.classList.add('open');
-}
+});
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((e, i) => {
     if (e.isIntersecting) {
