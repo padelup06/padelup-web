@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PadelUp — Abonnements Premium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --c-black: #0a0a0a;
+  --c-white: #f5f3ee;
+  --c-green: #3ecf5a;
+  --c-green-dark: #2ba844;
+  --c-gray: #141414;
+  --c-muted: #666;
+  --c-border: rgba(255,255,255,0.07);
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--c-black); color: var(--c-white); font-family: var(--font-body); overflow-x: hidden; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 48px;
+  background: rgba(10,10,10,0.92); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--c-border);
+}
+.nav-logo { font-family: var(--font-display); font-size: 26px; color: var(--c-white); text-decoration: none; letter-spacing: 0.04em; }
+.nav-logo span { color: var(--c-green); }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a { color: var(--c-muted); font-size: 14px; text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--c-white); }
+.nav-cta { background: var(--c-green); color: var(--c-black); padding: 10px 22px; border-radius: 100px; font-size: 14px; font-weight: 500; text-decoration: none; transition: background 0.2s; }
+.nav-cta:hover { background: var(--c-green-dark); }
+
+/* HERO */
+.pricing-hero {
+  position: relative; overflow: hidden;
+  padding: 140px 48px 80px; text-align: center;
+}
+.pricing-hero::before {
+  content: '';
+  position: absolute; top: -300px; left: 50%; transform: translateX(-50%);
+  width: 900px; height: 900px;
+  background: radial-gradient(circle, rgba(62,207,90,0.12) 0%, transparent 65%);
+  pointer-events: none; animation: pulse 7s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+  50% { opacity: 0.8; transform: translateX(-50%) scale(1.08); }
+}
+.section-tag {
+  font-family: var(--font-mono); font-size: 11px; color: var(--c-green);
+  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 14px;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 56px); line-height: 0.95;
+}
+.pricing-hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(52px, 7vw, 88px);
+  line-height: 0.93; margin-bottom: 20px;
+  animation: fadeUp 0.6s 0.08s ease both;
+}
+.accent { color: var(--c-green); }
+.pricing-hero p {
+  font-size: 17px; font-weight: 300;
+  color: rgba(245,243,238,0.55); max-width: 500px;
+  margin: 0 auto; line-height: 1.65;
+  animation: fadeUp 0.6s 0.15s ease both;
+}
+
+/* TOGGLE */
+.toggle-wrapper {
+  display: flex; align-items: center; justify-content: center;
+  gap: 16px; margin-top: 40px;
+  animation: fadeUp 0.6s 0.22s ease both;
+}
+.toggle-label {
+  font-size: 14px; font-weight: 500;
+  color: var(--c-muted); transition: color 0.3s;
+  cursor: pointer; user-select: none;
+}
+.toggle-label.active { color: var(--c-white); }
+.toggle-track {
+  position: relative; width: 52px; height: 28px;
+  background: var(--c-gray); border: 1px solid var(--c-border);
+  border-radius: 100px; cursor: pointer; transition: all 0.3s;
+}
+.toggle-track::after {
+  content: ''; position: absolute; top: 3px; left: 3px;
+  width: 20px; height: 20px;
+  background: var(--c-green); border-radius: 50%;
+  transition: transform 0.3s cubic-bezier(0.65, 0, 0.35, 1);
+  box-shadow: 0 2px 8px rgba(62,207,90,0.35);
+}
+.toggle-track.annual::after { transform: translateX(24px); }
+.toggle-track.annual { border-color: rgba(62,207,90,0.3); background: rgba(62,207,90,0.08); }
+.save-tag {
+  font-size: 11px; font-weight: 700;
+  color: var(--c-black); background: var(--c-green);
+  padding: 3px 10px; border-radius: 100px;
+  opacity: 0; transform: scale(0.8);
+  transition: opacity 0.3s, transform 0.3s;
+}
+.save-tag.visible { opacity: 1; transform: scale(1); }
+
+/* CARDS */
+.pricing-cards {
+  max-width: 920px; margin: 0 auto;
+  padding: 48px 24px 80px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+}
+.plan-card {
+  position: relative;
+  background: var(--c-gray); border: 1px solid var(--c-border);
+  border-radius: 20px; padding: 40px 32px;
+  display: flex; flex-direction: column;
+  transition: transform 0.35s, border-color 0.35s;
+  animation: fadeUp 0.7s 0.3s ease both;
+}
+.plan-card:hover { transform: translateY(-5px); }
+.plan-card.premium {
+  background: linear-gradient(165deg, #0f1f12 0%, #111a13 50%, var(--c-gray) 100%);
+  border-color: rgba(62,207,90,0.25);
+  animation-delay: 0.4s;
+}
+.plan-card.premium::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--c-green), #2effc8, var(--c-green));
+  border-radius: 20px 20px 0 0;
+}
+.plan-badge {
+  position: absolute; top: -12px; right: 24px;
+  padding: 5px 14px; font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.2px;
+  color: var(--c-black); background: var(--c-green);
+  border-radius: 100px;
+}
+.plan-name { font-family: var(--font-display); font-size: 32px; letter-spacing: 0.02em; }
+.plan-desc { font-size: 14px; font-weight: 300; color: var(--c-muted); line-height: 1.6; margin-top: 8px; }
+.plan-price { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--c-border); }
+.price-amount { font-family: var(--font-display); font-size: 56px; line-height: 1; }
+.price-amount .currency { font-size: 28px; vertical-align: super; margin-right: 2px; }
+.price-amount .period { font-family: var(--font-body); font-size: 15px; font-weight: 300; color: var(--c-muted); margin-left: 4px; }
+.price-note { font-size: 12px; color: var(--c-muted); margin-top: 6px; font-weight: 300; }
+.price-note .green { color: var(--c-green); font-weight: 500; }
+.plan-features { margin-top: 28px; display: flex; flex-direction: column; gap: 14px; flex: 1; }
+.plan-feature {
+  display: flex; align-items: flex-start; gap: 12px;
+  font-size: 14px; font-weight: 400; line-height: 1.5;
+  color: rgba(245,243,238,0.8);
+}
+.plan-feature .icon {
+  flex-shrink: 0; width: 20px; height: 20px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%; font-size: 11px; margin-top: 1px;
+}
+.plan-feature .icon.check { background: rgba(62,207,90,0.15); color: var(--c-green); }
+.plan-feature .icon.x { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.2); }
+.plan-feature .icon.star { background: rgba(62,207,90,0.15); color: var(--c-green); }
+.plan-feature.dimmed { color: rgba(245,243,238,0.3); }
+.plan-btn {
+  display: block; width: 100%; margin-top: 32px; padding: 16px;
+  text-align: center; border-radius: 14px;
+  font-size: 15px; font-weight: 600;
+  text-decoration: none; transition: all 0.25s;
+  cursor: pointer; border: none; font-family: var(--font-body);
+}
+.plan-btn.free { background: rgba(255,255,255,0.06); border: 1px solid var(--c-border); color: var(--c-white); }
+.plan-btn.free:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.15); }
+.plan-btn.pro { background: var(--c-green); color: var(--c-black); }
+.plan-btn.pro:hover { background: var(--c-green-dark); transform: translateY(-1px); }
+
+/* TABLE */
+.compare-section { max-width: 820px; margin: 0 auto; padding: 80px 24px; }
+.compare-section .section-title { margin-bottom: 48px; }
+.compare-table { width: 100%; border-collapse: collapse; }
+.compare-table thead th {
+  font-family: var(--font-display); font-size: 18px; letter-spacing: 0.03em;
+  padding: 16px 20px; text-align: center; border-bottom: 2px solid var(--c-border);
+}
+.compare-table thead th:first-child { text-align: left; }
+.compare-table thead th.premium-col { color: var(--c-green); }
+.compare-table tbody td {
+  padding: 16px 20px; border-bottom: 1px solid var(--c-border);
+  font-size: 14px; font-weight: 400; color: rgba(245,243,238,0.7);
+}
+.compare-table tbody td:first-child { color: var(--c-white); font-weight: 500; }
+.compare-table tbody td:not(:first-child) { text-align: center; }
+.compare-table tbody tr:hover td { background: rgba(62,207,90,0.03); }
+.table-check { color: var(--c-green); font-size: 16px; }
+.table-x { color: rgba(255,255,255,0.15); font-size: 14px; }
+.table-val { font-family: var(--font-mono); font-size: 13px; color: rgba(245,243,238,0.55); }
+.table-val.green { color: var(--c-green); font-weight: 500; }
+
+/* FAQ */
+.faq-section { max-width: 700px; margin: 0 auto; padding: 80px 24px 100px; }
+.faq-section .section-title { margin-bottom: 48px; }
+.faq-item { border-bottom: 1px solid var(--c-border); }
+.faq-q {
+  width: 100%; background: none; border: none; color: var(--c-white);
+  font-family: var(--font-body); font-size: 15px; text-align: left;
+  padding: 22px 0; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: center; gap: 20px;
+  transition: color 0.2s;
+}
+.faq-q:hover { color: var(--c-green); }
+.faq-icon {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: rgba(62,207,90,0.1); border: 1px solid rgba(62,207,90,0.2);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; color: var(--c-green); transition: transform 0.3s; font-size: 16px;
+}
+.faq-item.open .faq-icon { transform: rotate(45deg); }
+.faq-a {
+  font-size: 14px; font-weight: 300;
+  color: rgba(245,243,238,0.55); line-height: 1.7;
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s;
+}
+.faq-item.open .faq-a { max-height: 300px; padding-bottom: 20px; }
+
+/* CTA */
+.cta-bottom {
+  position: relative; overflow: hidden;
+  background: #0c1e0e; text-align: center; padding: 100px 48px;
+}
+.cta-bottom::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(62,207,90,0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cta-bottom .section-title { margin-bottom: 16px; position: relative; z-index: 1; }
+.cta-bottom .section-sub {
+  font-size: 16px; font-weight: 300; color: rgba(245,243,238,0.5);
+  max-width: 460px; margin: 0 auto 40px; line-height: 1.6;
+  position: relative; z-index: 1;
+}
+.cta-btns { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; position: relative; z-index: 1; }
+.btn-store {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--c-white); color: var(--c-black);
+  padding: 13px 22px; border-radius: 14px; text-decoration: none;
+  transition: transform 0.2s, background 0.2s;
+}
+.btn-store:hover { transform: translateY(-2px); background: var(--c-green); }
+.btn-store svg { width: 20px; height: 20px; flex-shrink: 0; }
+.btn-store-text { display: flex; flex-direction: column; }
+.btn-store-sub { font-size: 10px; opacity: 0.55; line-height: 1; }
+.btn-store-name { font-size: 14px; font-weight: 500; line-height: 1.3; }
+.btn-store-outline {
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14);
+  color: var(--c-white); padding: 13px 22px; border-radius: 14px;
+  text-decoration: none; transition: transform 0.2s, border-color 0.2s, background 0.2s;
+}
+.btn-store-outline:hover { transform: translateY(-2px); background: rgba(62,207,90,0.12); border-color: rgba(62,207,90,0.4); }
+.btn-store-outline svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+/* FOOTER */
+footer {
+  background: #050505; border-top: 1px solid var(--c-border);
+  padding: 40px 48px; display: flex; justify-content: space-between;
+  align-items: center; flex-wrap: wrap; gap: 20px;
+}
+.footer-logo { font-family: var(--font-display); font-size: 22px; }
+.footer-logo span { color: var(--c-green); }
+.footer-copy { font-size: 11px; color: rgba(255,255,255,0.18); margin-top: 4px; }
+.footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+.footer-links a { font-size: 13px; color: var(--c-muted); text-decoration: none; transition: color 0.2s; }
+.footer-links a:hover { color: var(--c-white); }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+.reveal { opacity: 1; transform: translateY(0); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.hidden { opacity: 0; transform: translateY(24px); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 900px) {
+  nav { padding: 14px 20px; }
+  .nav-links { display: none; }
+  .pricing-hero { padding: 120px 20px 60px; }
+  .pricing-cards { grid-template-columns: 1fr; padding: 32px 20px 60px; }
+  .compare-section { padding: 60px 16px; }
+  .compare-table thead th, .compare-table tbody td { padding: 12px 10px; font-size: 13px; }
+  .faq-section { padding: 60px 20px 80px; }
+  .cta-bottom { padding: 64px 20px; }
+  footer { padding: 28px 20px; flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 500px) {
+  .plan-card { padding: 32px 22px; }
+  .price-amount { font-size: 46px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="https://apppadelup.com" class="nav-logo"><img src="https://apppadelup.com/logo.png" alt="PadelUp" style="height:48px;width:auto;mix-blend-mode:screen;"></a>
+  <ul class="nav-links">
+    <li><a href="https://apppadelup.com#features">Fonctionnalités</a></li>
+    <li><a href="https://apppadelup.com#screenshots">App</a></li>
+    <li><a href="#pricing">Abonnements</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <a href="https://play.google.com/store/apps/details?id=com.padelup" class="nav-cta" target="_blank">Télécharger</a>
+</nav>
+
+<section class="pricing-hero" id="pricing">
+  <div class="section-tag" style="animation: fadeUp 0.5s ease both;">// abonnements</div>
+  <h1>CHOISISSEZ<br>VOTRE <span class="accent">PLAN</span></h1>
+  <p>Commencez gratuitement, passez Premium quand vous êtes prêt à exploser vos stats.</p>
+  <div class="toggle-wrapper">
+    <span class="toggle-label active" id="label-monthly">Mensuel</span>
+    <div class="toggle-track" id="toggle" onclick="togglePlan()"></div>
+    <span class="toggle-label" id="label-annual">Annuel</span>
+    <span class="save-tag" id="save-tag">−17%</span>
+  </div>
+</section>
+
+<div class="pricing-cards">
+  <!-- GRATUIT -->
+  <div class="plan-card">
+    <div class="plan-name">GRATUIT</div>
+    <div class="plan-desc">Découvrez PadelUp, trouvez des partenaires et suivez votre classement gratuitement.</div>
+    <div class="plan-price">
+      <div class="price-amount"><span class="currency">€</span>0<span class="period">/ mois</span></div>
+      <div class="price-note">Pour toujours. Aucune carte requise.</div>
+    </div>
+    <div class="plan-features">
+      <div class="plan-feature"><span class="icon check">✓</span> Classement ELO visible</div>
+      <div class="plan-feature"><span class="icon check">✓</span> Matchs publics & recherche partenaires</div>
+      <div class="plan-feature"><span class="icon check">✓</span> Classement national & régional</div>
+      <div class="plan-feature dimmed"><span class="icon x">✕</span> Analyse vidéo IA</div>
+      <div class="plan-feature dimmed"><span class="icon x">✕</span> Programme d'entraînement personnalisé</div>
+      <div class="plan-feature dimmed"><span class="icon x">✕</span> Métriques détaillées (+12 indicateurs)</div>
+      <div class="plan-feature dimmed"><span class="icon x">✕</span> Historique complet de progression</div>
+    </div>
+    <a href="https://play.google.com/store/apps/details?id=com.padelup" class="plan-btn free" target="_blank">Télécharger gratuitement</a>
+  </div>
+
+  <!-- PREMIUM -->
+  <div class="plan-card premium">
+    <div class="plan-badge">Populaire</div>
+    <div class="plan-name">PREMIUM <span class="accent">↗</span></div>
+    <div class="plan-desc">Analyse vidéo IA quotidienne, programme personnalisé et classement ELO certifié.</div>
+    <div class="plan-price">
+      <div class="price-amount"><span class="currency">€</span><span id="price-value">9,99</span><span class="period" id="price-period">/ mois</span></div>
+      <div class="price-note" id="price-note">Résiliable à tout moment.</div>
+    </div>
+    <div class="plan-features">
+      <div class="plan-feature"><span class="icon star">★</span> 1 analyse vidéo IA par jour</div>
+      <div class="plan-feature"><span class="icon star">★</span> Métriques détaillées (+12 indicateurs)</div>
+      <div class="plan-feature"><span class="icon star">★</span> Programme d'entraînement personnalisé IA</div>
+      <div class="plan-feature"><span class="icon star">★</span> ELO Certifié & classement complet</div>
+      <div class="plan-feature"><span class="icon star">★</span> Historique de progression détaillé</div>
+      <div class="plan-feature"><span class="icon star">★</span> Matchs publics & recherche partenaires</div>
+      <div class="plan-feature"><span class="icon star">★</span> Reconnaissance automatique des joueurs</div>
+    </div>
+    <button class="plan-btn pro" onclick="window.open('https://play.google.com/store/apps/details?id=com.padelup','_blank')">Passer Premium</button>
+  </div>
+</div>
+
+<!-- COMPARATIF -->
+<section class="compare-section">
+  <div class="section-tag reveal">// comparatif</div>
+  <h2 class="section-title reveal">TOUT<br>EN DÉTAIL</h2>
+  <table class="compare-table reveal">
+    <thead>
+      <tr>
+        <th>Fonctionnalité</th>
+        <th>Gratuit</th>
+        <th class="premium-col">Premium</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Analyse vidéo IA</td><td><span class="table-x">✕</span></td><td><span class="table-val green">1 / jour</span></td></tr>
+      <tr><td>Score global du match</td><td><span class="table-x">✕</span></td><td><span class="table-check">✓</span></td></tr>
+      <tr><td>Métriques détaillées (+12)</td><td><span class="table-x">✕</span></td><td><span class="table-check">✓</span></td></tr>
+      <tr><td>Programme entraînement IA</td><td><span class="table-x">✕</span></td><td><span class="table-check">✓</span></td></tr>
+      <tr><td>Exercices ciblés post-analyse</td><td><span class="table-x">✕</span></td><td><span class="table-check">✓</span></td></tr>
+      <tr><td>ELO & classement</td><td><span class="table-val">Visible</span></td><td><span class="table-val green">Certifié</span></td></tr>
+      <tr><td>Classement national & régional</td><td><span class="table-check">✓</span></td><td><span class="table-check">✓</span></td></tr>
+      <tr><td>Historique de progression</td><td><span class="table-val">30 jours</span></td><td><span class="table-val green">Illimité</span></td></tr>
+      <tr><td>Matchs publics</td><td><span class="table-check">✓</span></td><td><span class="table-check">✓</span></td></tr>
+      <tr><td>Reconnaissance des joueurs</td><td><span class="table-check">✓</span></td><td><span class="table-check">✓</span></td></tr>
+      <tr><td>Support prioritaire</td><td><span class="table-x">✕</span></td><td><span class="table-check">✓</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section" id="faq">
+  <div class="section-tag reveal">// questions fréquentes</div>
+  <h2 class="section-title reveal">À PROPOS DE<br>L'ABONNEMENT</h2>
+
+  <div class="faq-item">
+    <button class="faq-q">C'est quoi la différence entre Gratuit et Premium ?<span class="faq-icon">+</span></button>
+    <div class="faq-a">En Gratuit, vous accédez au classement ELO, aux matchs publics et à la recherche de partenaires. Le Premium débloque l'analyse vidéo IA (1 par jour), les 12+ métriques détaillées (habileté, filet, technique, réactivité…), le programme d'entraînement personnalisé par l'IA et l'historique de progression complet.</div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-q">Comment fonctionne la période d'essai ?<span class="faq-icon">+</span></button>
+    <div class="faq-a">La version gratuite est disponible sans limite de temps. Vous pouvez passer Premium à tout moment depuis l'app. Le paiement se fait via Google Play (et bientôt l'App Store) de manière sécurisée.</div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-q">Je peux résilier quand je veux ?<span class="faq-icon">+</span></button>
+    <div class="faq-a">Oui, l'abonnement est sans engagement. Vous pouvez annuler à tout moment depuis les paramètres de votre compte Google Play. Votre accès Premium reste actif jusqu'à la fin de la période payée.</div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-q">L'offre annuelle est-elle vraiment avantageuse ?<span class="faq-icon">+</span></button>
+    <div class="faq-a">L'abonnement annuel est à 119,99€/an au lieu de 9,99€ × 12 = 119,88€. Cela revient à environ 10,00€/mois, soit un tarif quasi identique mais avec l'avantage de ne pas avoir à se soucier du renouvellement chaque mois. C'est le choix idéal pour les joueurs réguliers.</div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-q">Je perds mes données si je passe de Gratuit à Premium ?<span class="faq-icon">+</span></button>
+    <div class="faq-a">Non, toutes vos analyses, scores et données ELO sont conservés. En passant Premium, vous débloquez simplement l'accès aux fonctionnalités avancées sur votre compte existant.</div>
+  </div>
+  <div class="faq-item">
+    <button class="faq-q">Comment payer ?<span class="faq-icon">+</span></button>
+    <div class="faq-a">Le paiement est géré directement via Google Play (ou l'App Store à venir). Carte bancaire, PayPal ou crédit Google Play sont acceptés selon votre configuration.</div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-bottom">
+  <h2 class="section-title">PRÊT À<br><span class="accent">PROGRESSER</span> ?</h2>
+  <p class="section-sub">Téléchargez PadelUp gratuitement et analysez votre premier match dès aujourd'hui.</p>
+  <div class="cta-btns">
+    <a href="https://play.google.com/store/apps/details?id=com.padelup" class="btn-store" target="_blank">
+      <svg viewBox="0 0 512 512" width="20" height="20"><path fill="#4CAF50" d="M48 428.7L254.9 256 48 83.3z"/><path fill="#F44336" d="M48 83.3l206.9 172.7L340.3 170 99 32.1C78.4 20.4 55.3 29.2 48 83.3z"/><path fill="#FFC107" d="M464 256c0-41.4-22.1-77.7-55.3-98.2L340.3 170 254.9 256l85.4 86 68.4-42.2C441.9 333.7 464 297.4 464 256z"/><path fill="#2196F3" d="M254.9 256L48 428.7c7.3 54.1 30.4 62.9 51 51.2L340.3 342l-85.4-86z"/></svg>
+      <div class="btn-store-text"><span class="btn-store-sub">Disponible sur</span><span class="btn-store-name">Google Play</span></div>
+    </a>
+    <a href="#" class="btn-store-outline" style="opacity:0.5;pointer-events:none;">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      <div class="btn-store-text"><span class="btn-store-sub">Bientôt sur</span><span class="btn-store-name">App Store</span></div>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div>
+    <div class="footer-logo"><img src="https://apppadelup.com/logo.png" alt="PadelUp" style="height:36px;width:auto;mix-blend-mode:screen;"></div>
+    <div class="footer-copy">© 2026 PadelUp. Tous droits réservés.</div>
+  </div>
+  <div class="footer-links">
+    <a href="https://apppadelup.com/privacy-policy.html">Politique de confidentialité</a>
+    <a href="https://apppadelup.com/delete-account.html">Supprimer mon compte</a>
+    <a href="https://apppadelup.com/contact.html">Contact</a>
+  </div>
+</footer>
+
+<script>
+let isAnnual = false;
+function togglePlan() {
+  isAnnual = !isAnnual;
+  document.getElementById('toggle').classList.toggle('annual', isAnnual);
+  document.getElementById('label-monthly').classList.toggle('active', !isAnnual);
+  document.getElementById('label-annual').classList.toggle('active', isAnnual);
+  document.getElementById('save-tag').classList.toggle('visible', isAnnual);
+  if (isAnnual) {
+    document.getElementById('price-value').textContent = '119,99';
+    document.getElementById('price-period').textContent = '/ an';
+    document.getElementById('price-note').innerHTML = 'Soit ~10,00€/mois · <span class="green">2 mois offerts</span>';
+  } else {
+    document.getElementById('price-value').textContent = '9,99';
+    document.getElementById('price-period').textContent = '/ mois';
+    document.getElementById('price-note').textContent = 'Résiliable à tout moment.';
+  }
+}
+document.querySelectorAll('.faq-q').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var item = this.closest('.faq-item');
+    var isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('open'); });
+    if (!isOpen) item.classList.add('open');
+  });
+});
+var observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e, i) {
+    if (e.isIntersecting) {
+      setTimeout(function() { e.target.classList.remove('hidden'); e.target.classList.add('visible'); }, i * 70);
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('hidden'); observer.observe(el); });
+</script>
+
+</body>
+</html>
