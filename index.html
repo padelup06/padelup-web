@@ -106,6 +106,29 @@ section { padding: 96px 48px; }
 .screen-card img { width: 100%; display: block; }
 .screen-label { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, transparent 100%); padding: 32px 14px 14px; font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.85); }
 
+/* PRICING PREVIEW */
+.pricing-preview { background: var(--c-gray); text-align: center; }
+.pricing-cards-mini { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 820px; margin: 52px auto 0; }
+.mini-card { background: var(--c-black); border: 1px solid var(--c-border); border-radius: 20px; padding: 36px 28px; text-align: left; transition: transform 0.3s, border-color 0.3s; position: relative; }
+.mini-card:hover { transform: translateY(-4px); }
+.mini-card.premium { border-color: rgba(62,207,90,0.25); }
+.mini-card.premium::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--c-green), #2effc8, var(--c-green)); border-radius: 20px 20px 0 0; }
+.mini-card-name { font-family: var(--font-display); font-size: 26px; }
+.mini-card-price { font-family: var(--font-display); font-size: 44px; margin-top: 16px; }
+.mini-card-price .currency { font-size: 22px; vertical-align: super; }
+.mini-card-price .period { font-family: var(--font-body); font-size: 14px; font-weight: 300; color: var(--c-muted); margin-left: 3px; }
+.mini-card-desc { font-size: 13px; color: var(--c-muted); margin-top: 8px; line-height: 1.5; }
+.mini-card-features { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+.mini-feat { display: flex; align-items: center; gap: 10px; font-size: 13px; color: rgba(245,243,238,0.75); }
+.mini-feat .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--c-green); flex-shrink: 0; }
+.mini-feat.off .dot { background: rgba(255,255,255,0.15); }
+.mini-feat.off { color: rgba(245,243,238,0.25); }
+.pricing-cta { margin-top: 40px; }
+.pricing-cta a { display: inline-flex; align-items: center; gap: 8px; background: var(--c-green); color: var(--c-black); padding: 14px 28px; border-radius: 100px; font-size: 15px; font-weight: 600; text-decoration: none; transition: background 0.2s, transform 0.2s; }
+.pricing-cta a:hover { background: var(--c-green-dark); transform: translateY(-2px); }
+.pricing-cta a .arrow { font-size: 18px; transition: transform 0.2s; }
+.pricing-cta a:hover .arrow { transform: translateX(4px); }
+
 /* TESTIMONIALS */
 .testimonials { background: var(--c-gray); }
 .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 52px; }
@@ -158,6 +181,7 @@ footer { background: #050505; border-top: 1px solid var(--c-border); padding: 40
   .hero-content { padding: 100px 20px 60px; }
   .features-grid { grid-template-columns: 1fr; gap: 2px; }
   .testimonials-grid { grid-template-columns: 1fr; gap: 14px; }
+  .pricing-cards-mini { grid-template-columns: 1fr; }
   footer { padding: 28px 20px; flex-direction: column; align-items: flex-start; }
   .cta-download { padding: 64px 20px; }
   .screenshots-intro { flex-direction: column; align-items: flex-start; }
@@ -315,6 +339,40 @@ document.addEventListener('DOMContentLoaded', function() {
       <p class="testi-text">"Le plan d'entraînement personnalisé change tout. Fini les exercices génériques — chaque session cible mes vraies lacunes. Mon smash s'est nettement amélioré."</p>
       <div class="testi-author"><div class="testi-avatar">K</div><div><div class="testi-name">Karim B.</div><div class="testi-role">Joueur P500 · Lyon</div></div></div>
     </div>
+  </div>
+</section>
+
+<section class="pricing-preview" id="abonnements">
+  <div class="section-tag reveal">// abonnements</div>
+  <h2 class="section-title reveal">GRATUIT OU<br><span class="accent">PREMIUM</span> ?</h2>
+  <div class="pricing-cards-mini">
+    <div class="mini-card reveal">
+      <div class="mini-card-name">GRATUIT</div>
+      <div class="mini-card-price"><span class="currency">€</span>0<span class="period">/ mois</span></div>
+      <div class="mini-card-desc">Classement, matchs publics et communauté.</div>
+      <div class="mini-card-features">
+        <div class="mini-feat"><span class="dot"></span> Classement ELO visible</div>
+        <div class="mini-feat"><span class="dot"></span> Matchs publics</div>
+        <div class="mini-feat"><span class="dot"></span> Classement national & régional</div>
+        <div class="mini-feat off"><span class="dot"></span> Analyse vidéo IA</div>
+        <div class="mini-feat off"><span class="dot"></span> Programme entraînement IA</div>
+      </div>
+    </div>
+    <div class="mini-card premium reveal">
+      <div class="mini-card-name">PREMIUM <span class="accent">↗</span></div>
+      <div class="mini-card-price"><span class="currency">€</span>9,99<span class="period">/ mois</span></div>
+      <div class="mini-card-desc">Analyse vidéo IA quotidienne et programme personnalisé.</div>
+      <div class="mini-card-features">
+        <div class="mini-feat"><span class="dot"></span> 1 analyse vidéo IA / jour</div>
+        <div class="mini-feat"><span class="dot"></span> Programme entraînement personnalisé</div>
+        <div class="mini-feat"><span class="dot"></span> Métriques détaillées (+12)</div>
+        <div class="mini-feat"><span class="dot"></span> ELO Certifié</div>
+        <div class="mini-feat"><span class="dot"></span> Historique de progression illimité</div>
+      </div>
+    </div>
+  </div>
+  <div class="pricing-cta reveal">
+    <a href="pricing.html">Voir tous les détails <span class="arrow">→</span></a>
   </div>
 </section>
 
