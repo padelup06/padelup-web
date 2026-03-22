@@ -416,7 +416,7 @@ footer {
   </div>
   <div class="faq-item">
     <button class="faq-q">L'offre annuelle est-elle vraiment avantageuse ?<span class="faq-icon">+</span></button>
-    <div class="faq-a">L'abonnement annuel est à 119,99€/an au lieu de 9,99€ × 12 = 119,88€. Cela revient à environ 10,00€/mois, soit un tarif quasi identique mais avec l'avantage de ne pas avoir à se soucier du renouvellement chaque mois. C'est le choix idéal pour les joueurs réguliers.</div>
+    <div class="faq-a">L'abonnement annuel est à 99,99€/an au lieu de 9,99€ × 12 = 119,88€. Cela revient à environ 8,33€/mois, soit près de 2 mois offerts. C'est le choix idéal pour les joueurs réguliers.</div>
   </div>
   <div class="faq-item">
     <button class="faq-q">Je perds mes données si je passe de Gratuit à Premium ?<span class="faq-icon">+</span></button>
@@ -465,9 +465,9 @@ function togglePlan() {
   document.getElementById('label-annual').classList.toggle('active', isAnnual);
   document.getElementById('save-tag').classList.toggle('visible', isAnnual);
   if (isAnnual) {
-    document.getElementById('price-value').textContent = '119,99';
+    document.getElementById('price-value').textContent = '99,99';
     document.getElementById('price-period').textContent = '/ an';
-    document.getElementById('price-note').innerHTML = 'Soit ~10,00€/mois · <span class="green">2 mois offerts</span>';
+    document.getElementById('price-note').innerHTML = 'Soit ~8,33€/mois · <span class="green">2 mois offerts</span>';
   } else {
     document.getElementById('price-value').textContent = '9,99';
     document.getElementById('price-period').textContent = '/ mois';
